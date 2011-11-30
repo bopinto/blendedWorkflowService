@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:bw="http://www.example.org/BWSchema"
+	targetNamespace="http://www.example.org/BWSchema"
+	elementFormDefault="qualified">
+	
+	<!--  The root element -->
+	<xs:complexType name="BW">
+		<xs:attribute name="uri" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:element name="BlendedWorkflowSchema">
+	<xs:complexType>
+		<xs:complexContent>
+			<xs:extension base="bw:BW">
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" name="metaData" type="bw:MetaData" />
+				<xs:element minOccurs="1" maxOccurs="1" name="yawlSpecID" type="xs:string" /> <!-- The UUID of the YAWL specification -->
+				<xs:element minOccurs="1" maxOccurs="1" name="dataModelURI" type="xs:string" />
+				<xs:element minOccurs="1" maxOccurs="1" name="goalSpec" type="bw:GoalSpecification" />
+				<xs:element minOccurs="1" maxOccurs="1" name="conditionsSpec" type="bw:ConditionSpecification" />
+			</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	</xs:element>
+	
+	<!--  Specification Meta Data -->
+	<xs:complexType name="MetaData">
+	<xs:sequence>
+		<xs:element minOccurs="1" maxOccurs="1" name="creator" type="xs:string" />
+		<xs:element minOccurs="1" maxOccurs="1" name="description" type="xs:string" />
+		<xs:element minOccurs="1" maxOccurs="1" name="version" type="xs:string" />
+		<xs:element minOccurs="1" maxOccurs="1" name="identifier" type="xs:string" />
+	</xs:sequence>
+	</xs:complexType>
+	
+	<!--  Goal Specification -->
+	<xs:complexType name="GoalSpec">
+		<xs:attribute name="id" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="GoalSpecification">
+		<xs:complexContent>
+			<xs:extension base="bw:GoalSpec">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="goalTree" type="bw:GoalTree" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="GoalTree">
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="rootgoal" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="unbounded" name="goal" type="bw:Goal" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="Goal">
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="id" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="name" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="mandatory" type="xs:boolean" />
+			<xs:element minOccurs="1" maxOccurs="1" name="state" type="bw:GoalState" />
+			<xs:element minOccurs="1" maxOccurs="1" name="definition" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="subgoals" type="bw:GoalRefs" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="GoalRefs">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="goal" type="xs:string" /> <!-- The Goal id -->
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="GoalState">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Deactivated" />
+			<xs:enumeration value="Activated" />
+			<xs:enumeration value="Skipped" />
+			<xs:enumeration value="Executed" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--  Conditions specification -->
+	<xs:complexType name="CondSpec">
+		<xs:attribute name="id" type="xs:string" />
+	</xs:complexType>
+	
+	<xs:complexType name="ConditionSpecification">
+		<xs:complexContent>
+			<xs:extension base="bw:CondSpec">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="unbounded" name="activityCond" type="bw:ActivityConditions"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="ActivityConditions">
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="activityID" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="precondition" type="xs:string" />
+			<xs:element minOccurs="1" maxOccurs="1" name="postcondition" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>	
+</xs:schema>

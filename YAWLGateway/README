@@ -1,0 +1,7 @@
+To integrate these files with YAWL, do the following:
+
+1- Add these two files to the package: org.yawlfoundation.yawl.elements.data.external in the YAWL.
+2- run the ant file (build.xml) in build folder, to generate the .war file.
+3- deploy the yawl.war file in tomcat.
+
+Note: to deploy the war file, tomcat must be stopped first.
